@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap");
+
+/* Preload fonts for better performance */
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Amiri";
+  font-display: swap;
+}
+@import "tailwindcss";
+
+body {
+  font-family: "Noto Sans Arabic", "Amiri", serif;
+  direction: rtl;
+}
+
+/* Theme variables for light/dark controlled by .dark on :root */
+:root {
+  --bg: #f3f4f6; /* gray-100 */
+  --text: #111827; /* gray-900 */
+  --panel-bg: #ffffff;
+  --panel-text: #111827;
+}
+
+:root.dark,
+html.dark {
+  --bg: #0b1220; /* slate-950-ish */
+  --text: #e5e7eb; /* gray-200 */
+  --panel-bg: #0f172a; /* slate-900 */
+  --panel-text: #e5e7eb;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.noto-font {
+  font-family: "Noto Sans Arabic", "Amiri", sans-serif;
+}
+
+.font-noto {
+  font-family: "Noto Sans Arabic", "Amiri", sans-serif;
+}
+
+.font-arabic {
+  font-family: "Amiri", serif;
+}
+
+/* Debug styles to test font loading */
+.font-test {
+  font-family: "Noto Sans Arabic", "Amiri", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Ensure Arabic text renders properly */
+.arabic-text {
+  font-family: "Noto Sans Arabic", "Amiri", serif;
+  direction: rtl;
+  text-align: center;
+  unicode-bidi: bidi-override;
+}
