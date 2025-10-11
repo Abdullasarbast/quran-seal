@@ -17,7 +17,13 @@ export const nameStorage = {
 
       // Filter out expired names (older than 1 year)
       const validNames = data.filter((item) => {
-        const itemDate = new Date(item.timestamp).getTime();
+        // Support both object and string legacy formats
+        const timestamp =
+          typeof item === "object" && item && item.timestamp
+            ? item.timestamp
+            : null;
+        if (!timestamp) return true; // if no timestamp, keep it
+        const itemDate = new Date(timestamp).getTime();
         const oneYearAgo = now - 365 * 24 * 60 * 60 * 1000;
         return itemDate > oneYearAgo;
       });
@@ -27,7 +33,9 @@ export const nameStorage = {
         localStorage.setItem(STORAGE_KEYS.NAMES, JSON.stringify(validNames));
       }
 
-      return validNames.map((item) => item.name);
+      return validNames.map((item) =>
+        typeof item === "string" ? item : item.name
+      );
     } catch (error) {
       console.error("Error getting names from localStorage:", error);
       return [];
@@ -69,11 +77,26 @@ export const nameStorage = {
       const names = JSON.parse(
         localStorage.getItem(STORAGE_KEYS.NAMES) || "[]"
       );
-      const filteredNames = names.filter((item) => item.name !== name);
+      const target = name && name.trim ? name.trim() : name;
+      const filteredNames = names.filter((item) => {
+        if (typeof item === "string") return item !== target;
+        return item && item.name !== target;
+      });
       localStorage.setItem(STORAGE_KEYS.NAMES, JSON.stringify(filteredNames));
       return true;
     } catch (error) {
       console.error("Error removing name from localStorage:", error);
+      return false;
+    }
+  },
+
+  // Clear all stored names
+  clearAllNames: () => {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.NAMES);
+      return true;
+    } catch (error) {
+      console.error("Error clearing names from localStorage:", error);
       return false;
     }
   },

@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Select, Input, Button, Modal, message, Switch } from "antd";
+import {
+  Select,
+  Input,
+  Button,
+  Modal,
+  message,
+  Switch,
+  Popconfirm,
+} from "antd";
 import {
   PlusOutlined,
   EditOutlined,
@@ -33,6 +41,14 @@ function App() {
       saveImage: "حفظ الصورة",
       viewSaved: "الصور المحفوظة",
       addNewName: "إضافة اسم جديد",
+      manageNames: "إدارة الأسماء",
+      delete: "حذف",
+      deleteAll: "حذف الكل",
+      close: "إغلاق",
+      confirmDeleteName: "هل تريد حذف هذا الاسم؟",
+      confirmDeleteAll: "هل تريد حذف جميع الأسماء؟",
+      names: "الأسماء",
+      noNames: "لا توجد أسماء محفوظة",
       selectName: "اختر اسمًا",
       manual: "يدوي",
       edit: "تعديل",
@@ -49,6 +65,14 @@ function App() {
       saveImage: "پاشەکەوتی وێنە",
       viewSaved: "وێنە پاشەکەوتکراوەکان",
       addNewName: "زیادکردنی ناوی نوێ",
+      manageNames: "بەڕێوەبردنی ناوەکان",
+      delete: "سڕینەوە",
+      deleteAll: "سڕینەوەی هەموو",
+      close: "داخستن",
+      confirmDeleteName: "دڵنیایت دەتەوێت ئەم ناوە بسڕیتەوە؟",
+      confirmDeleteAll: "دڵنیایت هەموو ناوەکان بسڕیتەوە؟",
+      names: "ناوەکان",
+      noNames: "هیچ ناوێک پاشەکەوت نەکراوە",
       selectName: "ناوێک هەڵبژێرە",
       manual: "دەستی",
       edit: "دەستکاری",
@@ -65,6 +89,14 @@ function App() {
       saveImage: "Save Image",
       viewSaved: "View Saved",
       addNewName: "Add New Name",
+      manageNames: "Manage Names",
+      delete: "Delete",
+      deleteAll: "Delete All",
+      close: "Close",
+      confirmDeleteName: "Delete this name?",
+      confirmDeleteAll: "Delete all saved names?",
+      names: "Names",
+      noNames: "No saved names",
       selectName: "Select name",
       manual: "Manual",
       edit: "Edit",
@@ -97,6 +129,7 @@ function App() {
   const [editingText, setEditingText] = useState("");
   const [showAddNameModal, setShowAddNameModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showManageNamesModal, setShowManageNamesModal] = useState(false);
   const [newName, setNewName] = useState("");
   const [showSavedImages, setShowSavedImages] = useState(false);
   const [manualNameInput, setManualNameInput] = useState("");
@@ -218,6 +251,36 @@ function App() {
       } else {
         message.error("Name already exists!");
       }
+    }
+  };
+
+  // Refresh stored names when Manage Names modal is opened
+  useEffect(() => {
+    if (showManageNamesModal) {
+      setStoredNames(nameStorage.getNames());
+    }
+  }, [showManageNamesModal]);
+
+  // Delete a stored name
+  const handleDeleteStoredName = (name) => {
+    const success = nameStorage.removeName(name);
+    if (success) {
+      setStoredNames(nameStorage.getNames());
+      message.success(t("delete"));
+    } else {
+      message.error("Failed");
+    }
+  };
+
+  // Clear all stored names
+  const handleClearAllNames = () => {
+    if (!storedNames.length) return;
+    const success = nameStorage.clearAllNames();
+    if (success) {
+      setStoredNames([]);
+      message.success(t("deleteAll"));
+    } else {
+      message.error("Failed");
     }
   };
 
@@ -448,6 +511,12 @@ function App() {
               {t("addNewName")}
             </Button>
             <Button
+              onClick={() => setShowManageNamesModal(true)}
+              className="w-full sm:w-auto"
+            >
+              {t("manageNames")}
+            </Button>
+            <Button
               icon={<SettingOutlined />}
               onClick={() => setShowSettingsModal(true)}
               shape="circle"
@@ -612,6 +681,55 @@ function App() {
             onChange={(e) => setNewName(e.target.value)}
             onPressEnter={handleAddName}
           />
+        </Modal>
+
+        {/* Manage Names Modal */}
+        <Modal
+          title={t("manageNames")}
+          open={showManageNamesModal}
+          onCancel={() => setShowManageNamesModal(false)}
+          footer={[
+            <Popconfirm
+              key="clear"
+              title={t("confirmDeleteAll")}
+              okText={t("deleteAll")}
+              cancelText={t("cancel")}
+              onConfirm={handleClearAllNames}
+              disabled={!storedNames.length}
+            >
+              <Button danger disabled={!storedNames.length}>
+                {t("deleteAll")}
+              </Button>
+            </Popconfirm>,
+            <Button key="close" onClick={() => setShowManageNamesModal(false)}>
+              {t("close")}
+            </Button>,
+          ]}
+        >
+          {storedNames.length ? (
+            <div className="space-y-2">
+              {storedNames.map((name) => (
+                <div
+                  key={name}
+                  className="flex items-center justify-between border border-gray-200 rounded px-3 py-2"
+                >
+                  <span>{name}</span>
+                  <Popconfirm
+                    title={t("confirmDeleteName")}
+                    okText={t("delete")}
+                    cancelText={t("cancel")}
+                    onConfirm={() => handleDeleteStoredName(name)}
+                  >
+                    <Button size="small" danger>
+                      {t("delete")}
+                    </Button>
+                  </Popconfirm>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 py-6">{t("noNames")}</div>
+          )}
         </Modal>
 
         {/* Settings Modal */}
