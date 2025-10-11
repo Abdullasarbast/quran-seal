@@ -473,46 +473,38 @@ function App() {
             color: "var(--panel-text)",
           }}
         >
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mb-4">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Input
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <div className="w-full sm:w-auto inline-flex items-center border border-gray-300 dark:border-gray-300  hover:border-blue-500 hover:cursor-pointer hover:text-blue-500 rounded-md h-8 px-3 bg-white shadow-sm duration-200">
+              <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full sm:w-auto"
+                className="w-full bg-transparent outline-none border-0 h-full hover:cursor-pointer hover:text-blue-500 duration-200"
               />
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={addRow}
-                className="w-full sm:w-auto"
-              >
-                {t("addRow")}
-              </Button>
-              <Button
-                icon={<DownloadOutlined />}
-                onClick={saveAsImage}
-                className="w-full sm:w-auto"
-              >
-                {t("saveImage")}
-              </Button>
-              <Button
-                icon={<HistoryOutlined />}
-                onClick={() => setShowSavedImages(true)}
-                className="w-full sm:w-auto"
-              >
-                {t("viewSaved")}
-              </Button>
             </div>
             <Button
+              icon={<DownloadOutlined />}
+              onClick={saveAsImage}
+              className="w-full sm:w-auto whitespace-normal text-center"
+            >
+              {t("saveImage")}
+            </Button>
+            <Button
+              icon={<HistoryOutlined />}
+              onClick={() => setShowSavedImages(true)}
+              className="w-full sm:w-auto whitespace-normal text-center"
+            >
+              {t("viewSaved")}
+            </Button>
+            <Button
               onClick={() => setShowAddNameModal(true)}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto whitespace-normal text-center"
             >
               {t("addNewName")}
             </Button>
             <Button
               onClick={() => setShowManageNamesModal(true)}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto whitespace-normal text-center"
             >
               {t("manageNames")}
             </Button>
@@ -523,6 +515,14 @@ function App() {
               aria-label="Settings"
               title="Settings"
             />
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={addRow}
+              className="w-full basis-full whitespace-normal text-center"
+            >
+              {t("addRow")}
+            </Button>
           </div>
         </div>
 
