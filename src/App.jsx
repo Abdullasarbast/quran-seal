@@ -17,6 +17,8 @@ import {
   BulbOutlined,
   GlobalOutlined,
   SettingOutlined,
+  TeamOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import { nameStorage, imageStorage } from "./utils/localStorage";
 import SavedImages from "./components/SavedImages";
@@ -42,6 +44,7 @@ function App() {
       viewSaved: "الصور المحفوظة",
       addNewName: "إضافة اسم جديد",
       manageNames: "إدارة الأسماء",
+      settings: "الإعدادات",
       delete: "حذف",
       deleteAll: "حذف الكل",
       close: "إغلاق",
@@ -66,6 +69,7 @@ function App() {
       viewSaved: "وێنە پاشەکەوتکراوەکان",
       addNewName: "زیادکردنی ناوی نوێ",
       manageNames: "بەڕێوەبردنی ناوەکان",
+      settings: "ڕێکخستنەکان",
       delete: "سڕینەوە",
       deleteAll: "سڕینەوەی هەموو",
       close: "داخستن",
@@ -90,6 +94,7 @@ function App() {
       viewSaved: "View Saved",
       addNewName: "Add New Name",
       manageNames: "Manage Names",
+      settings: "Settings",
       delete: "Delete",
       deleteAll: "Delete All",
       close: "Close",
@@ -497,12 +502,14 @@ function App() {
               {t("viewSaved")}
             </Button>
             <Button
+              icon={<UserAddOutlined />}
               onClick={() => setShowAddNameModal(true)}
               className="w-full sm:w-auto whitespace-normal text-center"
             >
               {t("addNewName")}
             </Button>
             <Button
+              icon={<TeamOutlined />}
               onClick={() => setShowManageNamesModal(true)}
               className="w-full sm:w-auto whitespace-normal text-center"
             >
@@ -511,10 +518,12 @@ function App() {
             <Button
               icon={<SettingOutlined />}
               onClick={() => setShowSettingsModal(true)}
-              shape="circle"
-              aria-label="Settings"
-              title="Settings"
-            />
+              className="w-full sm:w-auto whitespace-normal text-center"
+              aria-label={t("settings")}
+              title={t("settings")}
+            >
+              {t("settings")}
+            </Button>
             <Button
               type="primary"
               icon={<PlusOutlined />}
